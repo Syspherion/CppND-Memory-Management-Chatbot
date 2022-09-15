@@ -45,6 +45,14 @@ ChatBot::~ChatBot()
 //// STUDENT CODE
 ////
 
+ ChatBot::ChatBot(const ChatBot& other) // copy constructor
+ {
+    this->_image = other._image;
+    this->_chatLogic = other._chatLogic;
+    this->_currentNode = other._currentNode;
+    this->_rootNode = other._rootNode;
+ }
+
 ////
 //// EOF STUDENT CODE
 
