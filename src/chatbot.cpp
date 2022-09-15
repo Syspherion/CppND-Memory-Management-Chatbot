@@ -21,7 +21,7 @@ ChatBot::ChatBot()
 ChatBot::ChatBot(std::string filename)
 {
     std::cout << "ChatBot Constructor" << std::endl;
-    
+
     // invalidate data handles
     _chatLogic = nullptr;
     _rootNode = nullptr;
@@ -35,7 +35,7 @@ ChatBot::~ChatBot()
     std::cout << "ChatBot Destructor" << std::endl;
 
     // deallocate heap memory
-    if(_image != NULL) // Attention: wxWidgets used NULL and not nullptr
+    if (_image != NULL) // Attention: wxWidgets used NULL and not nullptr
     {
         delete _image;
         _image = NULL;
@@ -45,13 +45,97 @@ ChatBot::~ChatBot()
 //// STUDENT CODE
 ////
 
- ChatBot::ChatBot(const ChatBot& other) // copy constructor
- {
-    this->_image = other._image;
-    this->_chatLogic = other._chatLogic;
-    this->_currentNode = other._currentNode;
-    this->_rootNode = other._rootNode;
- }
+ChatBot::ChatBot(const ChatBot &source) // copy constructor
+{
+    std::cout << "ChatBot Copy Constructor" << std::endl;
+
+    _image = new wxBitmap(*source._image);
+    _chatLogic = new ChatLogic(*source._chatLogic);
+    _currentNode = new GraphNode(*source._currentNode);
+    _rootNode = new GraphNode(*source._rootNode);
+}
+
+ChatBot::ChatBot(const ChatBot &&source) // move constructor
+{
+    std::cout << "ChatBot Move Constructor" << std::endl;
+
+    _image = std::move(source._image);
+    _chatLogic = std::move(source._chatLogic);
+    _currentNode = std::move(source._currentNode);
+    _rootNode = std::move(source._rootNode);
+}
+
+ChatBot &ChatBot::operator=(const ChatBot &source) // : copy assignment operator
+{
+    std::cout << "ChatBot Copy Assignment Operator" << std::endl;
+    if (this == &source)
+        return *this;
+
+    if (_image != source._image && _image!=nullptr)
+    {
+        delete _image;
+        _image = new wxBitmap(*source._image);
+    }
+
+    if (_chatLogic != source._chatLogic && _chatLogic!=nullptr)
+    {
+        delete _chatLogic;
+        _chatLogic = new ChatLogic(*source._chatLogic);
+    }
+
+    if (_currentNode != source._currentNode && _currentNode!=nullptr)
+    {
+        delete _currentNode;
+        _currentNode = new GraphNode(*source._currentNode);
+    }
+
+    if (_rootNode != source._rootNode && _rootNode!=nullptr)
+    {
+        delete _rootNode;
+        _rootNode = new GraphNode(*source._rootNode);
+    }
+
+    return *this;
+}
+
+ChatBot &ChatBot::operator=(const ChatBot &&source) // : move assignment operator
+{
+ std::cout << "ChatBot Move Assignment Operator" << std::endl;
+
+    std::cout << "ChatBot Copy Assignment Operator" << std::endl;
+    if (this == &source)
+        return *this;
+
+    if (_image != source._image && _image!=nullptr)
+    {
+        delete _image;
+        _image = std::move(source._image);
+    }
+
+    if (_chatLogic != source._chatLogic && _chatLogic!=nullptr)
+    {
+        delete _chatLogic;
+        _chatLogic = std::move(source._chatLogic);
+    }
+
+    if (_currentNode != source._currentNode && _currentNode!=nullptr)
+    {
+        delete _currentNode;
+        _currentNode = std::move(source._currentNode);
+    }
+
+    if (_rootNode != source._rootNode && _rootNode!=nullptr)
+    {
+        delete _rootNode;
+        _rootNode = std::move(source._rootNode);
+    }
+
+    return *this;
+
+
+
+
+}
 
 ////
 //// EOF STUDENT CODE
@@ -77,7 +161,8 @@ void ChatBot::ReceiveMessageFromUser(std::string message)
     if (levDists.size() > 0)
     {
         // sort in ascending order of Levenshtein distance (best fit is at the top)
-        std::sort(levDists.begin(), levDists.end(), [](const EdgeDist &a, const EdgeDist &b) { return a.second < b.second; });
+        std::sort(levDists.begin(), levDists.end(), [](const EdgeDist &a, const EdgeDist &b)
+                  { return a.second < b.second; });
         newNode = levDists.at(0).first->GetChildNode(); // after sorting the best edge is at first position
     }
     else
