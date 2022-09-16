@@ -3,6 +3,7 @@
 
 #include <vector>
 #include <string>
+#include <memory>
 #include "chatgui.h"
 
 // forward declarations
@@ -17,7 +18,7 @@ private:
     ////
 
     // data handles (owned)
-    std::vector<GraphNode *> _nodes;
+    std::vector<std::unique_ptr<GraphNode>> _nodes;
     std::vector<GraphEdge *> _edges;
 
     ////
@@ -39,6 +40,12 @@ public:
     // constructor / destructor
     ChatLogic();
     ~ChatLogic();
+
+    // rule of five: needed because of unique_ptr _nodes
+    ChatLogic(const ChatLogic &source);
+    ChatLogic &operator=(const ChatLogic &source);
+    ChatLogic(ChatLogic &&source);
+    ChatLogic &operator=(ChatLogic &&source);
 
     // getter / setter
     void SetPanelDialogHandle(ChatBotPanelDialog *panelDialog);
