@@ -53,16 +53,24 @@ ChatBot::ChatBot(const ChatBot &source) // copy constructor
     _chatLogic = new ChatLogic(*source._chatLogic);
     _currentNode = new GraphNode(*source._currentNode);
     _rootNode = new GraphNode(*source._rootNode);
+
 }
 
-ChatBot::ChatBot(const ChatBot &&source) // move constructor
+ChatBot::ChatBot(ChatBot &&source) // move constructor
 {
     std::cout << "ChatBot Move Constructor" << std::endl;
 
-    _image = std::move(source._image);
-    _chatLogic = std::move(source._chatLogic);
-    _currentNode = std::move(source._currentNode);
-    _rootNode = std::move(source._rootNode);
+    _image = source._image;
+    source._image = NULL;
+
+    _chatLogic = source._chatLogic;
+    source._chatLogic = nullptr;
+
+    _currentNode =source._currentNode;
+    source._currentNode = nullptr;
+
+    _rootNode = source._rootNode;
+    source._rootNode = nullptr;
 }
 
 ChatBot &ChatBot::operator=(const ChatBot &source) // copy assignment operator
@@ -71,69 +79,69 @@ ChatBot &ChatBot::operator=(const ChatBot &source) // copy assignment operator
     if (this == &source)
         return *this;
 
-    if (_image != source._image && _image!=nullptr)
+    if (_image != NULL)
     {
         delete _image;
-        _image = new wxBitmap(*source._image);
     }
+    _image = new wxBitmap(*source._image);
 
-    if (_chatLogic != source._chatLogic && _chatLogic!=nullptr)
+    if (_chatLogic != nullptr)
     {
         delete _chatLogic;
-        _chatLogic = new ChatLogic(*source._chatLogic);
     }
+    _chatLogic = new ChatLogic(*source._chatLogic);
 
-    if (_currentNode != source._currentNode && _currentNode!=nullptr)
+    if (_currentNode != nullptr)
     {
         delete _currentNode;
-        _currentNode = new GraphNode(*source._currentNode);
     }
+    _currentNode = new GraphNode(*source._currentNode);
 
-    if (_rootNode != source._rootNode && _rootNode!=nullptr)
+    if (_rootNode != nullptr)
     {
         delete _rootNode;
-        _rootNode = new GraphNode(*source._rootNode);
     }
+    _rootNode = new GraphNode(*source._rootNode);
 
     return *this;
 }
 
-ChatBot &ChatBot::operator=(const ChatBot &&source) // move assignment operator
+ChatBot &ChatBot::operator=(ChatBot &&source) // move assignment operator
 {
- std::cout << "ChatBot Move Assignment Operator" << std::endl;
+    std::cout << "ChatBot Move Assignment Operator" << std::endl;
 
     if (this == &source)
         return *this;
 
-    if (_image != source._image && _image!=nullptr)
+    if (_image != nullptr)
     {
         delete _image;
-        _image = std::move(source._image);
     }
+        _image = source._image;
+        source._image = NULL;
 
-    if (_chatLogic != source._chatLogic && _chatLogic!=nullptr)
+    if (_chatLogic != nullptr)
     {
         delete _chatLogic;
-        _chatLogic = std::move(source._chatLogic);
     }
+        _chatLogic = source._chatLogic;
+        source._chatLogic = nullptr;
 
-    if (_currentNode != source._currentNode && _currentNode!=nullptr)
+    if (_currentNode != nullptr)
     {
         delete _currentNode;
-        _currentNode = std::move(source._currentNode);
     }
+        _currentNode = source._currentNode;
+        source._currentNode = nullptr;
 
-    if (_rootNode != source._rootNode && _rootNode!=nullptr)
+    if (_rootNode != nullptr)
     {
         delete _rootNode;
-        _rootNode = std::move(source._rootNode);
     }
+        _rootNode = source._rootNode;
+        source._rootNode = nullptr;
 
     return *this;
-
-
-
-
 }
 
 ////
