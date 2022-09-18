@@ -49,10 +49,10 @@ ChatBot::ChatBot(const ChatBot &source) // copy constructor
 {
     std::cout << "ChatBot Copy Constructor" << std::endl;
 
-    _image = new wxBitmap(*source._image);
-    _chatLogic = new ChatLogic(*source._chatLogic);
-    _currentNode = new GraphNode(*source._currentNode);
-    _rootNode = new GraphNode(*source._rootNode);
+    *_image = *source._image;
+    *_chatLogic = *source._chatLogic;
+    *_currentNode = *source._currentNode;
+    *_rootNode = *source._rootNode;
 
 }
 
@@ -79,29 +79,14 @@ ChatBot &ChatBot::operator=(const ChatBot &source) // copy assignment operator
     if (this == &source)
         return *this;
 
-    if (_image != NULL)
+    if (_image != nullptr)
     {
         delete _image;
     }
-    _image = new wxBitmap(*source._image);
-
-    if (_chatLogic != nullptr)
-    {
-        delete _chatLogic;
-    }
-    _chatLogic = new ChatLogic(*source._chatLogic);
-
-    if (_currentNode != nullptr)
-    {
-        delete _currentNode;
-    }
-    _currentNode = new GraphNode(*source._currentNode);
-
-    if (_rootNode != nullptr)
-    {
-        delete _rootNode;
-    }
-    _rootNode = new GraphNode(*source._rootNode);
+    *_image = *source._image;
+    *_chatLogic = *source._chatLogic;
+    *_currentNode = *source._currentNode;
+    *_rootNode = *source._rootNode;
 
     return *this;
 }
@@ -113,31 +98,20 @@ ChatBot &ChatBot::operator=(ChatBot &&source) // move assignment operator
     if (this == &source)
         return *this;
 
-    if (_image != nullptr)
+    if (_image != NULL)
     {
         delete _image;
     }
+
         _image = source._image;
         source._image = NULL;
-
-    if (_chatLogic != nullptr)
-    {
-        delete _chatLogic;
-    }
+ 
         _chatLogic = source._chatLogic;
         source._chatLogic = nullptr;
-
-    if (_currentNode != nullptr)
-    {
-        delete _currentNode;
-    }
+   
         _currentNode = source._currentNode;
         source._currentNode = nullptr;
-
-    if (_rootNode != nullptr)
-    {
-        delete _rootNode;
-    }
+    
         _rootNode = source._rootNode;
         source._rootNode = nullptr;
 

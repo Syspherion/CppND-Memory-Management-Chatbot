@@ -43,7 +43,7 @@ GraphNode::GraphNode(const GraphNode &source) // copy constructor
         _answers.push_back(answer);
     }
 
-    _chatBot = new ChatBot(*source._chatBot);
+    _chatBot = source._chatBot;
     _id = source._id;
 }
 
@@ -69,12 +69,13 @@ GraphNode::GraphNode(GraphNode &&source) // move constructor
         _answers.push_back(answer);
     }
 
+
     source._childEdges.clear();
     source._parentEdges.clear();
     source._answers.clear();
 
-    _chatBot = source._chatBot;
-    source._chatBot = nullptr;
+    _chatBot = std::move(source._chatBot);
+
 }
 
 GraphNode &GraphNode::operator=(const GraphNode &source) // copy assignment operator
@@ -105,7 +106,7 @@ GraphNode &GraphNode::operator=(const GraphNode &source) // copy assignment oper
         _answers.push_back(answer);
     }
 
-    _chatBot = new ChatBot(*source._chatBot);
+    _chatBot = source._chatBot;
     _id = source._id;
 
     return *this;
@@ -143,8 +144,8 @@ GraphNode &GraphNode::operator=(GraphNode &&source) // move assignment operator
     source._parentEdges.clear();
     source._answers.clear();
 
-    _chatBot = source._chatBot;
-    source._chatBot = nullptr;
+    _chatBot = std::move(source._chatBot);
+    
 
     return *this;
 }
@@ -166,16 +167,15 @@ void GraphNode::AddEdgeToChildNode(std::unique_ptr<GraphEdge> edge)
 
 //// STUDENT CODE
 ////
-void GraphNode::MoveChatbotHere(ChatBot *chatbot)
+void GraphNode::MoveChatbotHere(ChatBot chatbot)
 {
-    _chatBot = chatbot;
-    _chatBot->SetCurrentNode(this);
+    _chatBot = std::move(chatbot);
+    _chatBot.SetCurrentNode(this);
 }
 
 void GraphNode::MoveChatbotToNewNode(GraphNode *newNode)
 {
     newNode->MoveChatbotHere(_chatBot);
-    _chatBot = nullptr; // invalidate pointer at source
 }
 ////
 //// EOF STUDENT CODE

@@ -16,12 +16,6 @@ ChatLogic::ChatLogic()
     //// STUDENT CODE
     ////
 
-    // create instance of chatbot
-    _chatBot = new ChatBot("../images/chatbot.png");
-
-    // add pointer to chatlogic so that chatbot answers can be passed on to the GUI
-    _chatBot->SetChatLogicHandle(this);
-
     ////
     //// EOF STUDENT CODE
 }
@@ -30,9 +24,6 @@ ChatLogic::~ChatLogic()
 {
     //// STUDENT CODE
     ////
-
-    // delete chatbot instance
-    delete _chatBot;
 
     ////
     //// EOF STUDENT CODE
@@ -48,8 +39,8 @@ ChatLogic::ChatLogic(const ChatLogic &source) // copy constructor
         _nodes.push_back(std::make_unique<GraphNode>(node.GetID()));
     }
 
-    _currentNode = new GraphNode(*source._currentNode);
-    _chatBot = new ChatBot(*source._chatBot);
+    _currentNode = source._currentNode;
+    _chatBot = source._chatBot;
     _panelDialog = source._panelDialog;
 }
 
@@ -90,8 +81,8 @@ ChatLogic &ChatLogic::operator=(const ChatLogic &source) // copy assignment oper
         _nodes.push_back(std::make_unique<GraphNode>(node.GetID()));
     }
 
-    _currentNode = new GraphNode(*source._currentNode);
-    _chatBot = new ChatBot(*source._chatBot);
+    _currentNode = source._currentNode;
+    _chatBot = source._chatBot;
     _panelDialog = source._panelDialog;
 
     return *this;
@@ -298,8 +289,10 @@ void ChatLogic::LoadAnswerGraphFromFile(std::string filename)
     }
 
     // add chatbot to graph root node
-    _chatBot->SetRootNode(rootNode);
-    rootNode->MoveChatbotHere(_chatBot);
+    ChatBot chatBot("../images/chatbot.png");
+    chatBot.SetChatLogicHandle(this);
+    chatBot.SetRootNode(rootNode);
+    rootNode->MoveChatbotHere(std::move(chatBot));
 
     ////
     //// EOF STUDENT CODE
